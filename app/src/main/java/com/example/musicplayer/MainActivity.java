@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.musicplayer.databinding.ActivityMainBinding;
 
@@ -36,6 +37,25 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(muAdapter);
 
         onMusicChange(music.get(1));
+        activityMainBinding.ivPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (musicState) {
+                    case PLAYING:
+                        mediaPlayer.pause();
+                        musicState = MusicState.PAUSED;
+                        activityMainBinding.ivPlay.setImageResource(R.drawable.ic_play_32dp);
+                        break;
+                    case PAUSED:
+                    case STOPPED:
+
+                        mediaPlayer.start();
+                        musicState = MusicState.PLAYING;
+                        activityMainBinding.ivPlay.setImageResource(R.drawable.ic_baseline_pause_24);
+                        break;
+                }
+            }
+        });
     }
 
     public void onMusicChange(Music music) {
@@ -51,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-        activityMainBinding.nowDurationTv.setText(Music.convertMillisToString(mediaPlayer.getCurrentPosition()));
-                           activityMainBinding.slider.setValue(mediaPlayer.getCurrentPosition());
+                                activityMainBinding.nowDurationTv.setText(Music.convertMillisToString(mediaPlayer.getCurrentPosition()));
+                                activityMainBinding.slider.setValue(mediaPlayer.getCurrentPosition());
                             }
                         });
                     }

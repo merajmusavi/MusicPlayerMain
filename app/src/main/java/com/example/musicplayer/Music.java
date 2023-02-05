@@ -2,6 +2,7 @@ package com.example.musicplayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Music {
     private int id;
@@ -74,5 +75,13 @@ public class Music {
         musicList.add(music3);
         musicList.add(music1);
         return musicList;
+    }
+
+
+    public static String convertMillisToString(long durationInMillis) {
+        long second = (durationInMillis / 1000) % 60;
+        long minute = (durationInMillis / (1000 * 60)) % 60;
+
+        return String.format(Locale.US, "%02d:%02d", minute, second);
     }
 }

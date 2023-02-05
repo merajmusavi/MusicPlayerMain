@@ -13,7 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MuAdapter extends RecyclerView.Adapter<MuAdapter.MuViewHolder> {
-List<Music> music = Music.getList();
+List<Music> music;
+MuAdapter(List<Music> music){
+    this.music = music;
+}
     @NonNull
     @Override
     public MuViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

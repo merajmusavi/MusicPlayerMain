@@ -68,4 +68,12 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding.artistTv.setText(music.getArtist());
         activityMainBinding.cover.setImageResource(music.getCoverResId());
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        timer.cancel();
+        mediaPlayer.release();
+        mediaPlayer = null;
+    }
 }

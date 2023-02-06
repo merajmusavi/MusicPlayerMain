@@ -1,5 +1,6 @@
 package com.example.musicplayer;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.musicplayer.databinding.ActivityMainBinding;
+import com.google.android.material.slider.Slider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +22,10 @@ public class MainActivity extends AppCompatActivity {
     List<Music> music = Music.getList();
     private MediaPlayer mediaPlayer;
     private MusicState musicState = MusicState.STOPPED;
-    Timer timer;
+    private int cursor = 0;
 
+    Timer timer;
+    private Boolean isDragging = false;
     enum MusicState {
         PLAYING, PAUSED, STOPPED
     }
@@ -36,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(muAdapter);
 
-        onMusicChange(music.get(1));
+        onMusicChange(music.get(cursor));
         activityMainBinding.ivPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,9 +60,29 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        activityMainBinding.slider.addOnChangeListener(new Slider.OnChangeListener() {
+            @Override
+            public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
+                activityMainBinding.nowDurationTv.setText(Music.convertMillisToString((long) value));
+            }
+        });
+        activityMainBinding.slider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
+            @Override
+            public void onStartTrackingTouch(@NonNull Slider slider) {
+isDragging = true;
+            }
+
+            @Override
+            public void onStopTrackingTouch(@NonNull Slider slider) {
+isDragging = false;
+mediaPlayer.seekTo((int) slider.getValue());
+            }
+        });
     }
 
     public void onMusicChange(Music music) {
+        activityMainBinding.slider.setValue(0);
         mediaPlayer = MediaPlayer.create(this, R.raw.music_1);
         mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -71,9 +95,10 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                activityMainBinding.nowDurationTv.setText(Music.convertMillisToString(mediaPlayer.getCurrentPosition()));
+                                if (!isDragging){
+                                    activityMainBinding.nowDurationTv.setText(Music.convertMillisToString(mediaPlayer.getCurrentPosition()));
                                 activityMainBinding.slider.setValue(mediaPlayer.getCurrentPosition());
-                            }
+                            }}
                         });
                     }
                 }, 1000, 1000);
@@ -81,7 +106,12 @@ public class MainActivity extends AppCompatActivity {
                 musicState = MusicState.PLAYING;
                 activityMainBinding.slider.setValueTo(mediaPlayer.getDuration());
                 activityMainBinding.ivPlay.setImageResource(R.drawable.ic_baseline_pause_24);
-
+mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+changeMusic();
+    }
+});
             }
         });
         activityMainBinding.artistIv.setImageResource(music.getArtistResId());
@@ -95,5 +125,15 @@ public class MainActivity extends AppCompatActivity {
         timer.cancel();
         mediaPlayer.release();
         mediaPlayer = null;
+    }
+    public void changeMusic(){
+        if (cursor<music.size()-1){
+            cursor+=1;
+
+        }else {
+            cursor = 0;
+
+        }
+        onMusicChange(music.get(cursor));
     }
 }

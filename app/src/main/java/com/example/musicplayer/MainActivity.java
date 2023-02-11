@@ -17,15 +17,27 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MuAdapter.OnItemClick {
     ActivityMainBinding activityMainBinding;
     List<Music> music = Music.getList();
     private MediaPlayer mediaPlayer;
     private MusicState musicState = MusicState.STOPPED;
     private int cursor = 0;
+    MuAdapter muAdapter;
 
     Timer timer;
     private Boolean isDragging = false;
+
+    @Override
+    public void OnNewMuClick(Music music1, int po) {
+        timer.cancel();
+        timer.purge();
+        mediaPlayer.release();
+        cursor = po;
+        onMusicChange(music.get(cursor));
+
+    }
+
     enum MusicState {
         PLAYING, PAUSED, STOPPED
     }
@@ -36,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
         RecyclerView recyclerView = findViewById(R.id.rec_mu);
-        MuAdapter muAdapter = new MuAdapter(music);
+         muAdapter = new MuAdapter(music,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(muAdapter);
 
@@ -82,6 +94,7 @@ mediaPlayer.seekTo((int) slider.getValue());
     }
 
     public void onMusicChange(Music music) {
+        muAdapter.notifyMusicChanged(music);
         activityMainBinding.slider.setValue(0);
         mediaPlayer = MediaPlayer.create(this, R.raw.music_1);
         mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -127,6 +140,9 @@ changeMusic();
         mediaPlayer = null;
     }
     public void changeMusic(){
+        timer.cancel();
+        timer.purge();
+        mediaPlayer.release();
         if (cursor<music.size()-1){
             cursor+=1;
 

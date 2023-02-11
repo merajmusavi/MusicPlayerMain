@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements MuAdapter.OnItemC
         activityMainBinding.ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ChangeMuToPrev();
             }
         });
 

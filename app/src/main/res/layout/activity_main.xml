@@ -91,23 +91,21 @@
         android:id="@+id/nowDurationTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="46dp"
         android:text="01:06"
         android:textColor="#BCB7B7"
-        app:layout_constraintStart_toStartOf="@+id/slider"
-        app:layout_constraintTop_toBottomOf="@+id/slider" />
+        app:layout_constraintBottom_toTopOf="@+id/slider"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/duration_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="48dp"
         android:text="04:06"
         android:textColor="#BCB7B7"
-        app:layout_constraintEnd_toEndOf="@+id/slider"
-        app:layout_constraintTop_toBottomOf="@+id/slider" />
+        app:layout_constraintBottom_toTopOf="@+id/slider"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -169,5 +167,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <ImageView
+        android:id="@+id/iv_state_player"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="49dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/slider"
+        app:srcCompat="@drawable/ic_baseline_play_arrow_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

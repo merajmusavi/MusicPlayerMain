@@ -12,7 +12,6 @@ import android.view.View;
 import com.example.musicplayer.databinding.ActivityMainBinding;
 import com.google.android.material.slider.Slider;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -72,6 +71,18 @@ public class MainActivity extends AppCompatActivity implements MuAdapter.OnItemC
                 }
             }
         });
+        activityMainBinding.ivNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeMusicToNext();
+            }
+        });
+        activityMainBinding.ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         activityMainBinding.slider.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
@@ -122,7 +133,7 @@ mediaPlayer.seekTo((int) slider.getValue());
 mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
     @Override
     public void onCompletion(MediaPlayer mp) {
-changeMusic();
+changeMusicToNext();
     }
 });
             }
@@ -139,7 +150,7 @@ changeMusic();
         mediaPlayer.release();
         mediaPlayer = null;
     }
-    public void changeMusic(){
+    public void changeMusicToNext(){
         timer.cancel();
         timer.purge();
         mediaPlayer.release();
@@ -149,6 +160,19 @@ changeMusic();
         }else {
             cursor = 0;
 
+        }
+        onMusicChange(music.get(cursor));
+    }
+    public void ChangeMuToPrev(){
+        timer.cancel();
+        timer.purge();
+        mediaPlayer.release();
+
+        if (cursor==0){
+            cursor = music.size()-1;
+
+        }else {
+            cursor--;
         }
         onMusicChange(music.get(cursor));
     }

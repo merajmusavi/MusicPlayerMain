@@ -10,7 +10,13 @@ public class Music {
     private String artist;
     private int coverResId;
     private int artistResId;
-
+    private Boolean isInterest;
+    public Boolean getIsInterest(){
+        return isInterest;
+    }
+    public void setIsInterest(Boolean isInterest){
+        this.isInterest = isInterest;
+    }
     public int getId() {
         return id;
     }
@@ -58,18 +64,21 @@ public class Music {
         music1.setName("yad cheshm to mioftam");
         music1.setCoverResId(R.drawable.cover);
         music1.setArtistResId(R.drawable.mohsenchavoshi);
+        music1.setIsInterest(false);
 
         Music music2 = new Music();
         music2.setArtist("mohsenchavoshi");
         music2.setName("postchi");
         music2.setCoverResId(R.drawable.cover2);
         music2.setArtistResId(R.drawable.mohsenchavoshi);
+        music2.setIsInterest(false);
 
         Music music3 = new Music();
         music3.setArtist("mohsenchavoshi");
         music3.setName("ghashang man");
         music3.setCoverResId(R.drawable.cover3);
         music3.setArtistResId(R.drawable.mohsenchavoshi);
+        music3.setIsInterest(false);
 
         musicList.add(music2);
         musicList.add(music3);

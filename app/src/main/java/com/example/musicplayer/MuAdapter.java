@@ -14,22 +14,24 @@ import com.airbnb.lottie.LottieAnimationView;
 import java.util.List;
 
 public class MuAdapter extends RecyclerView.Adapter<MuAdapter.MuViewHolder> {
-List<Music> musicList;
+    List<Music> musicList;
     private OnItemClick onItemClick;
     private int playingMusicPos = -1;
-MuAdapter(List<Music> music,OnItemClick onItemClick){
-    this.musicList = music;
-    this.onItemClick = onItemClick;
-}
+
+    MuAdapter(List<Music> music, OnItemClick onItemClick) {
+        this.musicList = music;
+        this.onItemClick = onItemClick;
+    }
+
     @NonNull
     @Override
     public MuViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MuViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_music,parent,false));
+        return new MuViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_music, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull MuViewHolder holder, int position) {
-holder.bind(musicList.get(position));
+        holder.bind(musicList.get(position));
     }
 
     @Override
@@ -37,51 +39,66 @@ holder.bind(musicList.get(position));
         return musicList.size();
     }
 
-    public class MuViewHolder extends RecyclerView.ViewHolder{
+    public class MuViewHolder extends RecyclerView.ViewHolder {
 
 
-TextView name,artist;
-ImageView imageView;
-LottieAnimationView lottieAnimationView;
+        TextView name, artist;
+        ImageView imageView,faveBtn;
+        LottieAnimationView lottieAnimationView;
+
         public MuViewHolder(@NonNull View itemView) {
             super(itemView);
             artist = itemView.findViewById(R.id.tv_artist_name);
             name = itemView.findViewById(R.id.tv_mu);
             imageView = itemView.findViewById(R.id.iv_art);
             lottieAnimationView = itemView.findViewById(R.id.animateview);
+            faveBtn = itemView.findViewById(R.id.iv_fave);
         }
-        public void bind(Music music){
+
+        public void bind(Music music) {
             name.setText(music.getArtist());
             artist.setText(music.getName());
             imageView.setImageResource(music.getCoverResId());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClick.OnNewMuClick(music,getAdapterPosition());
+                    onItemClick.OnNewMuClick(music, getAdapterPosition());
                 }
             });
-            if (getAdapterPosition() == playingMusicPos){
-lottieAnimationView.setVisibility(View.VISIBLE);
+            if (getAdapterPosition() == playingMusicPos) {
+                lottieAnimationView.setVisibility(View.VISIBLE);
 
-            }else {
+            } else {
                 lottieAnimationView.setVisibility(View.GONE);
             }
+            faveBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClick.OnFaveBtnClicked(music);
+                }
+            });
 
         }
-    }
-    public void notifyMusicChanged(Music music){
-    int position = musicList.indexOf(music);
-    if (position!=-1){
-        if (playingMusicPos != position){
-            notifyItemChanged(playingMusicPos);
-            playingMusicPos = position;
-            notifyItemChanged(playingMusicPos);
-        }
-    }
+
+
     }
 
-    public interface OnItemClick{
-    void OnNewMuClick(Music music,int po);
+    public void notifyMusicChanged(Music music) {
+        int position = musicList.indexOf(music);
+        if (position != -1) {
+            if (playingMusicPos != position) {
+                notifyItemChanged(playingMusicPos);
+                playingMusicPos = position;
+                notifyItemChanged(playingMusicPos);
+            }
+        }
+    }
+
+    public interface OnItemClick {
+        void OnNewMuClick(Music music, int po);
+
+        void OnFaveBtnClicked(Music music);
+
     }
 
 }

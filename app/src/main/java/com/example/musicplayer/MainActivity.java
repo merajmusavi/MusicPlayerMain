@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.musicplayer.databinding.ActivityMainBinding;
 import com.google.android.material.slider.Slider;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements MuAdapter.OnItemC
 
     }
 
+
     enum MusicState {
         PLAYING, PAUSED, STOPPED
     }
@@ -59,11 +61,11 @@ public class MainActivity extends AppCompatActivity implements MuAdapter.OnItemC
             @Override
             public void onClick(View v) {
 
-                if (StatePlayer==0){
+                if (StatePlayer == 0) {
                     StatePlayer = 1;
                     activityMainBinding.ivStatePlayer.setImageResource(R.drawable.ic_baseline_replay_24);
 
-                }else {
+                } else {
                     StatePlayer = 0;
                     activityMainBinding.ivStatePlayer.setImageResource(R.drawable.ic_baseline_play_arrow_24);
 
@@ -154,8 +156,7 @@ public class MainActivity extends AppCompatActivity implements MuAdapter.OnItemC
                     public void onCompletion(MediaPlayer mp) {
                         if (StatePlayer == 0) {
                             changeMusicToNext();
-                        }
-                        else{
+                        } else {
                             timer.cancel();
                             timer.purge();
                             mediaPlayer.release();
@@ -208,4 +209,14 @@ public class MainActivity extends AppCompatActivity implements MuAdapter.OnItemC
         }
         onMusicChange(musicList.get(cursor));
     }
+
+
+    @Override
+    public void OnFaveBtnClicked(Music music) {
+
+
+    }
+
+
+
 }

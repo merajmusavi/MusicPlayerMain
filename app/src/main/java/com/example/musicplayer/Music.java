@@ -60,6 +60,7 @@ public class Music {
     public static List<Music> getList(){
         List<Music> musicList=new ArrayList<>();
         Music music1 = new Music();
+        music1.setId(0);
         music1.setArtist("mohsenchavoshi");
         music1.setName("yad cheshm to mioftam");
         music1.setCoverResId(R.drawable.cover);
@@ -67,6 +68,7 @@ public class Music {
         music1.setIsInterest(false);
 
         Music music2 = new Music();
+        music2.setId(1);
         music2.setArtist("mohsenchavoshi");
         music2.setName("postchi");
         music2.setCoverResId(R.drawable.cover2);
@@ -74,6 +76,7 @@ public class Music {
         music2.setIsInterest(false);
 
         Music music3 = new Music();
+        music3.setId(2);
         music3.setArtist("mohsenchavoshi");
         music3.setName("ghashang man");
         music3.setCoverResId(R.drawable.cover3);

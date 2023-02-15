@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements MuAdapter.OnItemC
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
         RecyclerView recyclerView = findViewById(R.id.rec_mu);
-        muAdapter = new MuAdapter(musicList, this);
+        muAdapter = new MuAdapter(musicList, this,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(muAdapter);
 
@@ -213,8 +213,6 @@ public class MainActivity extends AppCompatActivity implements MuAdapter.OnItemC
 
     @Override
     public void OnFaveBtnClicked(Music music) {
-
-
     }
 
 

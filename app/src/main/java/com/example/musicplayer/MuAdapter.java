@@ -1,5 +1,6 @@
 package com.example.musicplayer;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,13 @@ public class MuAdapter extends RecyclerView.Adapter<MuAdapter.MuViewHolder> {
     List<Music> musicList;
     private OnItemClick onItemClick;
     private int playingMusicPos = -1;
+    Context context;
+    FaveDao faveDao;
 
-    MuAdapter(List<Music> music, OnItemClick onItemClick) {
+    MuAdapter(List<Music> music, OnItemClick onItemClick, Context context) {
         this.musicList = music;
         this.onItemClick = onItemClick;
+        this.context = context;
     }
 
     @NonNull
@@ -32,6 +36,32 @@ public class MuAdapter extends RecyclerView.Adapter<MuAdapter.MuViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MuViewHolder holder, int position) {
         holder.bind(musicList.get(position));
+        final Music music_item = musicList.get(position);
+
+        if (faveDao.isFave(music_item.getId()) == 1) {
+            holder.faveBtn.setImageResource(R.drawable.ic_baseline_favorite_24);
+
+        } else {
+            holder.faveBtn.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+        }
+
+        holder.faveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DataModelFave dataModelFave = new DataModelFave();
+                int id = music_item.getId();
+                dataModelFave.setId(id);
+                if (faveDao.isFave(music_item.getId()) != 1) {
+                    holder.faveBtn.setImageResource(R.drawable.ic_baseline_favorite_24);
+                    faveDao.addData(dataModelFave);
+                } else {
+                    holder.faveBtn.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                    faveDao.delete(dataModelFave);
+                }
+
+            }
+        });
+
     }
 
     @Override
@@ -43,7 +73,7 @@ public class MuAdapter extends RecyclerView.Adapter<MuAdapter.MuViewHolder> {
 
 
         TextView name, artist;
-        ImageView imageView,faveBtn;
+        ImageView imageView, faveBtn;
         LottieAnimationView lottieAnimationView;
 
         public MuViewHolder(@NonNull View itemView) {
@@ -56,8 +86,10 @@ public class MuAdapter extends RecyclerView.Adapter<MuAdapter.MuViewHolder> {
         }
 
         public void bind(Music music) {
+            faveDao = DataBaseFave.dataBaseFave(context).getFaveDao();
             name.setText(music.getArtist());
             artist.setText(music.getName());
+
             imageView.setImageResource(music.getCoverResId());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -71,12 +103,7 @@ public class MuAdapter extends RecyclerView.Adapter<MuAdapter.MuViewHolder> {
             } else {
                 lottieAnimationView.setVisibility(View.GONE);
             }
-            faveBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClick.OnFaveBtnClicked(music);
-                }
-            });
+
 
         }
 
